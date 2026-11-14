@@ -63,6 +63,7 @@ overhead (a real CPU is slower, so this baseline is conservative).
 | 16 | 256 | 87 | 7,250 | 57.4% | 147.0x | 6.0x |
 | 32 | 1024 | 30 | 3,300 | 31.5% | 322.9x | 8.4x |
 
+
 ![Speedup vs array size](docs/speedup.png)
 
 Two honest observations the numbers show:
@@ -74,6 +75,18 @@ Two honest observations the numbers show:
   SRAMs) is the most valuable next step.
 
 Regenerate with `make bench`.
+
+## Synthesis (area)
+
+CI synthesizes the design with Yosys (`synth_xilinx`, generic 7-series) for N = 4, 8, 16 and
+reports LUT, flip-flop, and DSP counts. Clock frequency requires place-and-route timing
+analysis (e.g. Vivado on a target board).
+
+| N | LUTs | Flip-flops | DSP48 | RAM primitives |
+|---|---|---|---|---|
+| 4 | 529 | 125 | 16 | 96 |
+| 8 | 1376 | 702 | 64 | 384 |
+| 16 | 4680 | 3391 | 256 | 1536 |
 
 ## Repository layout
 
