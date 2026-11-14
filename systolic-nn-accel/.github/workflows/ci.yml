@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y iverilog
+          pip install -r requirements.txt
+
+      - name: Python model tests
+        run: make model-test
+
+      - name: Verilog testbench (Icarus Verilog)
+        run: make rtl-test
+
+      - name: Digit-recognition demo (bit-exact check)
+        run: make demo
