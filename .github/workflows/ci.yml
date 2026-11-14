@@ -30,3 +30,28 @@ jobs:
 
       - name: Digit-recognition demo (bit-exact check)
         run: make demo
+
+  synth:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Yosys
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y yosys
+
+      - name: Synthesize (N = 4, 8, 16)
+        run: python scripts/synth.py
+
+      - name: Show results in the job summary
+        run: cat docs/synthesis.md >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: synthesis-report
+          path: docs/synthesis.md
